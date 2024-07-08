@@ -17,8 +17,10 @@ import java.util.Date;
 public class DeviceMeasure {
     @Id
     private String id;
+    private Long validHR;
     private Long heartRate;
     private Long spo2Rate;
+    private Long validSP02;
     @CreatedDate
     private Date timestamp;
 
