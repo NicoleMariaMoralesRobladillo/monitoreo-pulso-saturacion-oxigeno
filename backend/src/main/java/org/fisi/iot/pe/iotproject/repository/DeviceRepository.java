@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface DeviceRepository extends MongoRepository<DeviceMeasure, String> {
     //Query to get all the measures between two dates
-    @Query("{'timestamp': {$gte: ?0, $lte: ?1}}")
+    @Query("{'timestamp': {$gte: ?0, $lte: ?1}, 'validHR': {$eq: 1}, 'validSP02': {$eq: 1}}")
     List<DeviceMeasure> findByTimestampBetween(Date init, Date end);
 }
