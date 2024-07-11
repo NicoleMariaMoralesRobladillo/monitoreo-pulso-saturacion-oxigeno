@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:mqtt_app_client/model/measure.dart';
 import 'package:mqtt_app_client/mqtt/mqtt_manager.dart';
 import 'package:mqtt_app_client/mqtt/state/mqtt_app_state.dart';
+import 'package:mqtt_app_client/widgets/background.dart';
 import 'package:provider/provider.dart';
+import 'package:lottie/lottie.dart';
 
 class MQTTView extends StatefulWidget {
   const MQTTView({super.key});
@@ -39,7 +41,12 @@ class _MQTTViewState extends State<MQTTView> {
   Widget build(BuildContext context) {
     final MQTTAppState appState = Provider.of<MQTTAppState>(context);
     currentAppState = appState;
-    final Scaffold scaffold = Scaffold(body: _buildColumn());
+    final Scaffold scaffold = Scaffold(
+        backgroundColor: Colors.black,
+        body: CustomPaint(
+          painter: BacgroundPaint(),
+          child: _buildColumn(),
+        ));
     return scaffold;
   }
 
@@ -48,8 +55,23 @@ class _MQTTViewState extends State<MQTTView> {
       children: <Widget>[
         _buildConnectionStateText(
             _prepareStateMessageFrom(currentAppState.getAppConnectionState)),
+        const SizedBox(height: 140),
+        SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: Stack(alignment: Alignment.center, children: [
+              DemoCircleWave(
+                count: 200,
+                isProcessing: false,
+              ),
+              Transform.rotate(
+                  angle: -0.3,
+                  child: LottieBuilder.asset(
+                    "assets/heart_bubble.json",
+                  ))
+            ])),
+        const SizedBox(height: 140),
         _buildEditableColumn(),
-        _buildMeasure(currentAppState.getReceivedText)
+        _buildMeasure(currentAppState.getReceivedText),
       ],
     );
   }
@@ -70,7 +92,7 @@ class _MQTTViewState extends State<MQTTView> {
       children: <Widget>[
         Expanded(
           child: Container(
-              color: Colors.deepOrangeAccent,
+              color: Colors.orange,
               child: Text(status, textAlign: TextAlign.center)),
         ),
       ],
@@ -83,23 +105,34 @@ class _MQTTViewState extends State<MQTTView> {
         Expanded(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.lightBlueAccent,
+              backgroundColor: state == MQTTAppConnectionState.connected
+                  ? Colors.white
+                  : Colors.green,
             ),
             onPressed: state == MQTTAppConnectionState.disconnected
                 ? _configureAndConnect
-                : null,
-            child: const Text('Conectar'),
+                : _nothing,
+            child: const Text(
+              'Conectar',
+              style: TextStyle(color: Colors.black),
+            ),
           ),
         ),
         const SizedBox(width: 10),
         Expanded(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.redAccent,
+              backgroundColor: state == MQTTAppConnectionState.connected
+                  ? Colors.red
+                  : Colors.white,
             ),
-            onPressed:
-                state == MQTTAppConnectionState.connected ? _disconnect : null,
-            child: const Text('Desconectar'),
+            onPressed: state == MQTTAppConnectionState.connected
+                ? _disconnect
+                : _nothing,
+            child: const Text(
+              'Desconectar',
+              style: TextStyle(color: Colors.black),
+            ),
           ),
         ),
       ],
@@ -107,35 +140,90 @@ class _MQTTViewState extends State<MQTTView> {
   }
 
   Widget _buildMeasure(String text) {
-    Map<String, dynamic> measureJson = jsonDecode(text);
-    Measure measure = Measure.fromJson(measureJson);
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const SizedBox(height: 20),
-          Text(
-            'Saturación de Oxígeno: ${measure.spo2Rate}%',
-            style: const TextStyle(fontSize: 24),
+    if (text.isEmpty) {
+      return const Center(
+        child: Text(
+          'No se han recibido datos.',
+          style: TextStyle(fontSize: 24, color: Colors.white),
+        ),
+      );
+    }
+
+    try {
+      Map<String, dynamic> measureJson = jsonDecode(text);
+      Measure measure = Measure.fromJson(measureJson);
+
+      List<Widget> measureWidgets = [];
+
+      measureWidgets.add(Text(
+        'Saturación de Oxígeno: ${measure.spo2Rate}%',
+        style: const TextStyle(fontSize: 24, color: Colors.white),
+      ));
+      if (measure.spo2Rate < 90) {
+        measureWidgets.add(
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text(
+              'Advertencia: ¡Saturación de oxígeno baja!',
+              style: TextStyle(fontSize: 20, color: Colors.red),
+            ),
           ),
-          const SizedBox(height: 20),
-          Text(
-            'Frecuencia Cardíaca: ${measure.heartRate} bpm',
-            style: const TextStyle(fontSize: 24),
+        );
+      }
+
+      measureWidgets.add(const SizedBox(height: 20));
+
+      measureWidgets.add(Text(
+        'Frecuencia Cardíaca: ${measure.heartRate} bpm',
+        style: const TextStyle(fontSize: 24, color: Colors.white),
+      ));
+      if (measure.heartRate > 120) {
+        measureWidgets.add(
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text(
+              'Advertencia: ¡Frecuencia cardíaca alta!',
+              style: TextStyle(fontSize: 20, color: Colors.red),
+            ),
           ),
-        ],
-      ),
-    );
+        );
+      } else if (measure.heartRate < 50) {
+        measureWidgets.add(
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text(
+              'Advertencia: ¡Frecuencia cardíaca baja!',
+              style: TextStyle(fontSize: 20, color: Colors.red),
+            ),
+          ),
+        );
+      }
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: measureWidgets,
+        ),
+      );
+    } catch (e) {
+      return const Center(
+        child: Text(
+          'Error al procesar los datos.',
+          style: TextStyle(fontSize: 24, color: Colors.red),
+        ),
+      );
+    }
   }
 
   String _prepareStateMessageFrom(MQTTAppConnectionState state) {
     switch (state) {
       case MQTTAppConnectionState.connected:
-        return 'Conectando';
+        return 'Conectado';
       case MQTTAppConnectionState.connecting:
         return 'Conectando';
       case MQTTAppConnectionState.disconnected:
         return 'Desconectado';
+      default:
+        return 'Estado desconocido';
     }
   }
 
@@ -156,4 +244,6 @@ class _MQTTViewState extends State<MQTTView> {
   void _disconnect() {
     manager.disconnect();
   }
+
+  void _nothing() {}
 }
