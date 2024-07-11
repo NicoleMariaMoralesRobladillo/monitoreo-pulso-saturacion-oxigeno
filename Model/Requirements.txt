@@ -1,0 +1,8 @@
+fastapi
+tensorflow
+numpy
+uvivorn
+pillow
+io
+pickle
+pydantic

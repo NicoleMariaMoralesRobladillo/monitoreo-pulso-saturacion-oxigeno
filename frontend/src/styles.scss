@@ -1,0 +1,19 @@
+/* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/primeng.css";
+@import 'primeflex/primeflex.scss';
+
+:root {
+  --colorPrimary: #DEF9C4;
+  --colorSecondary: #50B498;
+  --colorPrimaryHover: #9CDBA6;
+  --colorSecondaryHover: #468585;
+}
+
+
+body {
+  font-size: 14px;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

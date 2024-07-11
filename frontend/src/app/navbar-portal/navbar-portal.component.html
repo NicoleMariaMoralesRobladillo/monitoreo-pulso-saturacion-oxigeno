@@ -1,0 +1,62 @@
+<div class="surface-overlay py-3 px-4 md:px-6 shadow-1 flex align-items-center justify-content-between relative sticky header"
+    style="min-height: 80px; background-color: #DEF9C4 !important">
+    <a routerLink="/arduinitos-portal" class="mr-0 lg:mr-6"><img src="assets/images/fisi.png" alt="Logo IziPay"
+            height="60" /></a>
+    <div class="flex flex-row">
+        <div class="align-items-center flex-grow-1 justify-content-between flex static w-full surface-overlay"
+            style="background-color: #DEF9C4 !important">
+            <ul class="list-none p-0 m-0 flex align-items-center select-none surface-border">
+                <li class="hidden sm:block">
+                    <a pRipple routerLink="/arduinitos-portal" id="opc-home"
+                        class="flex px-3 py-2 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150">
+                        <i class="pi pi-home text-color" style="font-size: 1.5rem"></i>
+                    </a>
+                </li>
+                <li class="hidden lg:block">
+                    <a class="flex px-3 py-2 align-items-center font-medium border-round">
+                        <div>
+                            <p-avatar label="U" styleClass="mr-2"
+                                [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }" shape="circle" />
+                        </div>
+
+
+                        <div class="text-color">
+                            <div class="font-medium">Hola,</div>
+                            <span class="font-medium lg:text-sm text-xs">Arduinito</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="">
+                    <a class="pl-3 py-2 cursor-pointer flex align-items-center text-700" (click)="changeSideMenu()">
+                        <i class="pi pi-bars text-4xl text-color" ></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<p-sidebar [(visible)]="sidebarVisible">
+    <div class="flex flex-column justify-content-between" style="height: 100%">
+      <div>
+        <div class="flex flex-column align-items-center">
+          <div
+            >
+            <p-avatar label="U" styleClass="mr-2"
+                                [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }" shape="circle" />
+        </div>
+          
+          <div class="flex flex-column">
+            <span class="span-prf-name text-center">Arduinito</span>
+            <span class="span-prf-rol text-center">usuario</span>
+          </div>
+        </div>
+        <div class="flex flex-column">
+          <h3 class="span-prf-name">MENU</h3>
+        </div>
+      </div>
+      <button class="btn-exit" >
+        <i class="pi pi-sign-out mr-3"></i>Salir
+      </button>
+    </div>
+
+  </p-sidebar>

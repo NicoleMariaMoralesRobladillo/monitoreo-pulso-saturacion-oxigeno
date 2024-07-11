@@ -1,0 +1,13 @@
+.text-color{
+    color: var(--colorSecondaryHover) !important
+}
+.btn-exit{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    color: var(--colorPrimary) !important;
+    background-color: var(--colorSecondaryHover) !important;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
