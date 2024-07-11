@@ -1,0 +1,36 @@
+<app-navbar-portal></app-navbar-portal>
+<div *ngIf="!loading" class="grid w-full bg-portal px-1">
+    <div class="col-12 flex flex-row">
+        <div class="col-6">
+            <h2>Oxigeno</h2>
+            <h1>{{spo2Rate}}</h1>
+        </div>
+        <div class="col-6">
+            <h2>Pulso</h2>
+            <h1>{{heartRate}}</h1>
+        </div>
+    </div>
+    <div class="flex flex-row col-12" [formGroup]="filter">
+        <div class="flex flex-column mr-2 justify-content-center">
+            <label for="date">Fecha de inicio</label>
+            <input type="date" formControlName="init">
+        </div>
+        <div class="flex flex-column mr-2 justify-content-center">
+            <label for="date">Fecha de fin</label>
+            <input type="date" formControlName="end">
+        </div>
+        <div class="flex flex-column mr-2 justify-content-center">
+            <button     pButton 
+            pRipple  (click)="buscar()" class="p-button-success">Buscar</button>
+        </div>
+        <div class="flex flex-column mr-2 justify-content-center">
+            <button (click)="exportToCsv()" class="p-button-contrast">Descargar</button>
+        </div>
+    </div>
+    <div class="demo-chart col-12 md:col-6">
+        <div echarts [options]="timeSerieGraph"></div>
+    </div>
+    <div class="demo-chart col-12 md:col-6">
+        <div echarts [options]="timeSerieGraph2"></div>
+    </div>
+</div>

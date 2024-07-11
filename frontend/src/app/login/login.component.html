@@ -1,0 +1,35 @@
+<div class="flex w-full  bg-login">
+    <div class="m-auto flex col-12 flex justify-content-center		">
+        <div class="flex flex-row col-12 md:col-7 h-30rem border-circle">
+            <div class="md:col-5 h-full p-0 login-image md:border-round-left-xl">
+            </div>
+            <div class="col-12 md:col-7 bg-login-form align-content-center md:border-round-right-xl">
+                <div class="flex flex-column ">
+                    <h1 class="text-center">ArduinitosApp</h1>
+
+                    <div class="flex flex-column col-6 m-auto">
+                        <div class="flex flex-column">
+                            <label for="username">Usuario</label>
+                            <input pInputText id="username" aria-describedby="username-help" />
+                            <small id="username-help">
+                                Ingrese su usuario
+                            </small>
+                        </div>
+                        <div class="flex flex-column mt-1">
+                            <label for="username">Contraseña</label>
+
+                            <p-password [feedback]="false" class="w-full" [style]="{'   width':'100%'}"  [inputStyle]="{'width':'100%'}" [toggleMask]="true"/>
+                            <small id="username-help">
+                                Ingrese su contraseña
+                            </small>
+                        </div>
+                        <div class="flex flex-column mt-2">
+                            <button (click)="login()" pButton [raised]="true"  type="button" label="Iniciar" class="w-full"></button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
